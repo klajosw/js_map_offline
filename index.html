@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="hu">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="content-language" content="en, hu" />
+    <meta name="author" content="http://mierdekel.hu, [Kecskeméti Lajos]" />
+<title>Mi érdekel? RODOSZ helyi térkép</title>
+<meta property="og:title" content="Online learning, quiz, test, map, poz. handler in android and mobille platform." />
+<meta property="og:description" content="All in Online learning, quiz, test, map, poz. handler in android and mobille platform. All in elearning, ehealth, ehome, e-learning, e-health, e-home." />
+<meta property="og:url" content="http://www.mierdekel.hu/klwp/" />
+<meta property="og:image" content="images/mie.png" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="hu_HU" />
+<meta property="og:locale:alternate" content="en_GB" />
+<meta property="og:site_name" content="mierdekel.hu" />
+
+<link rel="icon" href="images/favicon.ico">
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="images/favicon.ico" >
+<link rel="apple-touch-icon" type="image/png" href="images/mie.png" >
+<link rel="icon" type="image/png" href="images/mie.png" >
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+
+<meta name="description" content="Mi érdekel? Online oktatás, képzés, felkészítés, felmérés, teszt, térkép, pozició kezelés android és mobil platformon.">
+
+<meta property="og:title" content="Online learning, quiz, test, map, poz. handler in android and mobille platform." />
+<meta property="og:description" content="All in Online learning, quiz, test, map, poz. handler in android and mobille platform. All in elearning, ehealth, ehome, e-learning, e-health, e-home." />
+<meta property="og:url" content="http://www.mierdekel.hu/klwp/" />
+<meta property="og:image" content="images/mie.png" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="hu_HU" />
+<meta property="og:locale:alternate" content="en_GB" />
+<meta property="og:site_name" content="mierdekel.hu" />
+
+<meta name="dc.language" CONTENT="HU">
+<meta name="dc.source" CONTENT="http://www.mierdekel.hu/">
+<meta name="dc.relation" CONTENT="http://www.mierdekel.hu/klwp/">
+<meta name="dc.title" CONTENT="Mi érdekel?">
+<meta name="dc.keywords" CONTENT="online oktatás képzés felkészítés teszt felmérés térkép gps pozició adatok android mobille">
+<meta name="dc.subject" CONTENT="online oktatás képzés felkészítés teszt felmérés térkép gps pozició adatok android mobille">
+<meta name="dc.description" CONTENT="Online learning, quiz, test, map, poz. handler in android and mobille platform.">	
+	
+	<link rel="stylesheet" href="leaflet.css" />
+	<link rel="stylesheet" href="leaflet-list-markers.css" />
+	<style>
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0;}
+#map {
+	border-radius:.125em;
+	border:2px solid #c1c;
+	/* box-shadow: 0 0 8px #999;*/
+	float:left;
+	width:99%;
+	height:99%;	
+}
+
+		.custom .leaflet-popup-tip, .custom .leaflet-popup-content-wrapper {
+        background: #e93434;
+        color: #ffffff; }
+		
+a {
+	color:#1978cf;
+}
+a:hover {
+	color:#fff;
+}
+h2, h3, h4 {
+	white-space:nowrap;
+	margin:1em 0 0 0;
+}
+h3 a,
+h3 a:hover {
+	text-decoration:none;
+}
+#desc {
+	float: left;
+	margin-bottom: 1em;
+	position: relative;
+	white-space:nowrap;
+	font-size:1em;
+}
+
+ul {
+	font-size:.85em;
+	margin:0;
+	padding:0;
+}
+li {
+	margin:0 0 2px 18px;
+}
+
+#mie_keres {
+	position:fixed;
+	top:10px;
+	left:30px;
+	width:11em;
+	min-height:4em;
+	margin-left:1em;
+	padding:.25em;
+	/*overflow-y:scroll;*/
+	float:left;
+	background-color: rgba(100, 100, 200, 0.4);
+	border:1px solid #aaa;
+	box-shadow: 2px 2px 6px #999;
+	color:#666;
+}		
+
+.fa-map-marker:before {content: '☉'; }  
+
+	
+	</style>
+<script type="text/javascript" src="jquery.min.js"></script>	
+<script src="leaflet.js"></script>
+<script src="leaflet-list-markers.js"></script>
+<script src="mie_poi.js"></script>
+<script>
+//	src="L.Control.Locate.js" 
+/*! Version: 0.43.0
+Date: 2015-05-27 */
+
+/*!
+Copyright (c) 2014 Dominik Moritz
+This file is part of the leaflet locate control. It is licensed under the MIT license.
+You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
+*/
+!function(a,b){"function"==typeof define&&define.amd?define(["leaflet"],a):"object"==typeof exports&&(module.exports=a("undefined"!=typeof b&&b.L?L:require("leaflet"))),"undefined"!=typeof b&&b.L&&(b.L.Locate=a(L))}(function(a){return a.Control.Locate=a.Control.extend({options:{position:"topleft",drawCircle:!0,follow:!1,stopFollowingOnDrag:!1,remainActive:!1,markerClass:a.circleMarker,circleStyle:{color:"#136AEC",fillColor:"#136AEC",fillOpacity:.15,weight:2,opacity:.5},markerStyle:{color:"#136AEC",fillColor:"#2A93EE",fillOpacity:.7,weight:2,opacity:.9,radius:5},followCircleStyle:{},followMarkerStyle:{},icon:"fa fa-map-marker",iconLoading:"fa fa-spinner fa-spin",circlePadding:[0,0],metric:!0,onLocationError:function(a){alert(a.message)},onLocationOutsideMapBounds:function(a){a.stop(),alert(a.options.strings.outsideMapBoundsMsg)},setView:!0,keepCurrentZoomLevel:!1,showPopup:!0,strings:{title:"Show me where I am",popup:"You are within {distance} {unit} from this point",outsideMapBoundsMsg:"You seem located outside the boundaries of the map"},locateOptions:{maxZoom:1/0,watch:!0}},initialize:function(b){a.Map.addInitHook(function(){this.options.locateControl&&this.addControl(this)});for(var c in b)"object"==typeof this.options[c]?a.extend(this.options[c],b[c]):this.options[c]=b[c];a.extend(this.options.locateOptions,{setView:!1})},_activate:function(){this.options.setView&&(this._locateOnNextLocationFound=!0),this._active||this._map.locate(this.options.locateOptions),this._active=!0,this.options.follow&&this._startFollowing(this._map)},_deactivate:function(){this._map.stopLocate(),this._map.off("dragstart",this._stopFollowing),this.options.follow&&this._following&&this._stopFollowing(this._map)},drawMarker:function(b){void 0===this._event.accuracy&&(this._event.accuracy=0);var c=this._event.accuracy;this._locateOnNextLocationFound&&(this._isOutsideMapBounds()?this.options.onLocationOutsideMapBounds(this):this.options.keepCurrentZoomLevel||!this.options.drawCircle?b.panTo([this._event.latitude,this._event.longitude]):b.fitBounds(this._event.bounds,{padding:this.options.circlePadding,maxZoom:this.options.keepCurrentZoomLevel?b.getZoom():this.options.locateOptions.maxZoom}),this._locateOnNextLocationFound=!1);var d,e;if(this.options.drawCircle)if(d=this._following?this.options.followCircleStyle:this.options.circleStyle,this._circle){this._circle.setLatLng(this._event.latlng).setRadius(c);for(e in d)this._circle.options[e]=d[e]}else this._circle=a.circle(this._event.latlng,c,d).addTo(this._layer);var f,g;this.options.metric?(f=c.toFixed(0),g="meters"):(f=(3.2808399*c).toFixed(0),g="feet");var h;h=this._following?this.options.followMarkerStyle:this.options.markerStyle,this._marker?this.updateMarker(this._event.latlng,h):this._marker=this.createMarker(this._event.latlng,h).addTo(this._layer);var i=this.options.strings.popup;this.options.showPopup&&i&&this._marker.bindPopup(a.Util.template(i,{distance:f,unit:g}))._popup.setLatLng(this._event.latlng),this._toggleContainerStyle()},createMarker:function(a,b){return this.options.markerClass(a,b)},updateMarker:function(a,b){this._marker.setLatLng(a);for(var c in b)this._marker.options[c]=b[c]},removeMarker:function(){this._layer.clearLayers(),this._marker=void 0,this._circle=void 0},onAdd:function(b){var c=a.DomUtil.create("div","leaflet-control-locate leaflet-bar leaflet-control");this._layer=new a.LayerGroup,this._layer.addTo(b),this._event=void 0;var d={};return a.extend(d,this.options.markerStyle,this.options.followMarkerStyle),this.options.followMarkerStyle=d,d={},a.extend(d,this.options.circleStyle,this.options.followCircleStyle),this.options.followCircleStyle=d,this._link=a.DomUtil.create("a","leaflet-bar-part leaflet-bar-part-single",c),this._link.href="#",this._link.title=this.options.strings.title,this._icon=a.DomUtil.create("span",this.options.icon,this._link),a.DomEvent.on(this._link,"click",a.DomEvent.stopPropagation).on(this._link,"click",a.DomEvent.preventDefault).on(this._link,"click",function(){var a=void 0===this._event||this._map.getBounds().contains(this._event.latlng)||!this.options.setView||this._isOutsideMapBounds();!this.options.remainActive&&this._active&&a?this.stop():this.start()},this).on(this._link,"dblclick",a.DomEvent.stopPropagation),this._resetVariables(),this.bindEvents(b),c},bindEvents:function(a){a.on("locationfound",this._onLocationFound,this),a.on("locationerror",this._onLocationError,this),a.on("unload",this.stop,this)},start:function(){this._activate(),this._event?this.drawMarker(this._map):this._setClasses("requesting")},stop:function(){this._deactivate(),this._cleanClasses(),this._resetVariables(),this.removeMarker()},_onLocationError:function(a){3==a.code&&this.options.locateOptions.watch||(this.stop(),this.options.onLocationError(a))},_onLocationFound:function(a){this._event&&this._event.latlng.lat===a.latlng.lat&&this._event.latlng.lng===a.latlng.lng&&this._event.accuracy===a.accuracy||this._active&&(this._event=a,this.options.follow&&this._following&&(this._locateOnNextLocationFound=!0),this.drawMarker(this._map))},_startFollowing:function(){this._map.fire("startfollowing",this),this._following=!0,this.options.stopFollowingOnDrag&&this._map.on("dragstart",this._stopFollowing,this)},_stopFollowing:function(){this._map.fire("stopfollowing",this),this._following=!1,this.options.stopFollowingOnDrag&&this._map.off("dragstart",this._stopFollowing),this._toggleContainerStyle()},_isOutsideMapBounds:function(){return void 0===this._event?!1:this._map.options.maxBounds&&!this._map.options.maxBounds.contains(this._event.latlng)},_toggleContainerStyle:function(){this._container&&this._setClasses(this._following?"following":"active")},_setClasses:function(b){"requesting"==b?(a.DomUtil.removeClasses(this._container,"active following"),a.DomUtil.addClasses(this._container,"requesting"),a.DomUtil.removeClasses(this._icon,this.options.icon),a.DomUtil.addClasses(this._icon,this.options.iconLoading)):"active"==b?(a.DomUtil.removeClasses(this._container,"requesting following"),a.DomUtil.addClasses(this._container,"active"),a.DomUtil.removeClasses(this._icon,this.options.iconLoading),a.DomUtil.addClasses(this._icon,this.options.icon)):"following"==b&&(a.DomUtil.removeClasses(this._container,"requesting"),a.DomUtil.addClasses(this._container,"active following"),a.DomUtil.removeClasses(this._icon,this.options.iconLoading),a.DomUtil.addClasses(this._icon,this.options.icon))},_cleanClasses:function(){a.DomUtil.removeClass(this._container,"requesting"),a.DomUtil.removeClass(this._container,"active"),a.DomUtil.removeClass(this._container,"following"),a.DomUtil.removeClasses(this._icon,this.options.iconLoading),a.DomUtil.addClasses(this._icon,this.options.icon)},_resetVariables:function(){this._active=!1,this._locateOnNextLocationFound=this.options.setView,this._following=!1}}),a.control.locate=function(b){return new a.Control.Locate(b)},function(){var b=function(b,c,d){d=d.split(" "),d.forEach(function(d){a.DomUtil[b].call(this,c,d)})};a.DomUtil.addClasses=function(a,c){b("addClass",a,c)},a.DomUtil.removeClasses=function(a,c){b("removeClass",a,c)}}(),a.Control.Locate},window);
+//# sourceMappingURL=L.Control.Locate.min.js.map
+</script>
+</head>
+<body>
+<div id="map" class="map"></div>
+<div id="mie_keres" class="mie_keres">
+<a href="http://mierdekel.hu" alt="Mi érdekel?" title="Mi érdekel?" ><img src="images/mie.png"></a>
+   <br />
+   <input type="text" name="mie_szur_poi" id="mie_szur_poi">
+   <br />
+   <button type="button" name="mie_szur_gomb" id="mie_szur_gomb" alt="Szűrés" title="Szűrés"  >★</button>
+   <button type="button" name="mie_alap_gomb" id="mie_alap_gomb" alt="Alaphelyzet visszaállítás" title="Alaphelyzet visszaállítás" >☄</button>
+</div>
+
+<script>
+// rendezés
+cities.sort();
+cities.sort(function(a, b){
+    if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
+    return 0;
+})
+// térkép tile online
+var mie_map_layer1 = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+           attribution: '&copy; thunderforest.com contributors'
+         });
+// térkép tile online		 
+var mie_map_layer2   = L.tileLayer('http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png', {
+           attribution: '&copy; wmflabs.org contributors'
+         });	
+// térkép tile local		 
+var mie_map_layer3   =  L.tileLayer('{z}/{x}/{y}.png', {
+           attribution: '&copy; mierekel.hu contributors'
+         });	
+// Réteg vezérlő		 
+var baseMaps = {
+    "thunderforest.com": mie_map_layer1,
+	"wmflabs.org": mie_map_layer2,
+    "MIE_LOCAL": mie_map_layer3
+    };
+// képkép alap obj
+var map = new L.Map('map', {
+ zoom: 14, 
+ minZoom: 11,
+ maxZoom: 15,
+ layers: [mie_map_layer1, mie_map_layer2, mie_map_layer3],
+ center: L.latLng(36.390991,28.234690999) 
+ }); 
+// csak egy rétegnél 
+//  map.addLayer(new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+
+var markersLayer = new L.LayerGroup();	
+map.addLayer(markersLayer);
+
+var overlayMaps = {
+    "MIE POI": markersLayer
+    };	
+	
+L.control.layers(baseMaps  // csak egy kiválasztható retegek
+ , overlayMaps             // több is választható rétegek
+).addTo(map);		
+
+for(var i in cities)L.marker(L.latLng(cities[i].loc), {title: cities[i].name}).bindPopup('<h3>'+cities[i].name+'</h3>poz:'+cities[i].loc+'<br />'+cities[i].pop).addTo( markersLayer );
+
+var list = new L.Control.ListMarkers({layer: markersLayer, itemIcon: null});
+// elem eseménykezelők	
+	list.on('item-mouseover', function(e) {
+		e.layer.setIcon(L.icon({
+			iconUrl: './images/select-marker.png'
+		}))
+	}).on('item-mouseout', function(e) {
+		e.layer.setIcon(L.icon({
+			iconUrl: L.Icon.Default.imagePath+'/marker-icon.png'
+		}))
+	});
+// összekapcsol
+map.addControl( list );
+
+// ------  saját poz
+lc = L.control.locate({
+    follow: true,
+    strings: {
+        title: "Saját helyzetem/My Position"
+    }
+}).addTo(map);
+//
+map.on('startfollowing', function() {
+    map.on('dragstart', lc._stopFollowing, lc);
+}).on('stopfollowing', function() {
+    map.off('dragstart', lc._stopFollowing, lc);
+});
+//---------
+// gomb esemény kezelő dinamikusan	
+ $('#mie_szur_gomb').click(function(e) {
+  var mie_szur =  $('#mie_szur_poi').val();
+  var cities2 = cities;
+  //var mie_szur =  document.getElementById("mie_szur_poi").value;
+  //console.log(mie_szur);
+  // szűrés
+  if ( mie_szur.length > 0 ){
+    cities2 = cities.filter(
+      function (ee) {
+        var firstChar = ee.name.substr(0, mie_szur.length);
+        if (firstChar.toLowerCase() == mie_szur)
+          return true;
+        else 
+		  return false;
+      }
+    );
+  } 
+  //map.removeLayer(markersLayer);
+  markersLayer.clearLayers();
+  //markersLayer = null;
+  //markersLayer = new L.LayerGroup();
+  //map.addLayer(markersLayer);
+  for(var i in cities2) L.marker(L.latLng(cities2[i].loc), {title: cities2[i].name}).bindPopup('<h3>'+cities2[i].name+'</h3>poz:'+cities2[i].loc+'<br />'+cities2[i].pop).addTo( markersLayer );
+
+  list = new L.Control.ListMarkers({layer: markersLayer, itemIcon: null});
+	
+	list.on('item-mouseover', function(e) {
+		e.layer.setIcon(L.icon({
+			iconUrl: './images/select-marker.png'
+		}))
+	}).on('item-mouseout', function(e) {
+		e.layer.setIcon(L.icon({
+			iconUrl: L.Icon.Default.imagePath+'/marker-icon.png'
+		}))
+	});
+  
+  // console.log(markersLayer);
+ });
+ //-----------------
+ $('#mie_alap_gomb').click(function(e) { 
+
+// alaphelyzetbe állítás
+//  map.panTo(new L.LatLng(36.390991, 28.234690999));
+  map.setView(new L.LatLng(36.390991, 28.234690999), 13);
+
+ });
+
+</script>
+	
+</body>
+</html>
